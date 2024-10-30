@@ -58,3 +58,50 @@ function getOperationType() {
     }, 1000);
   }
   
+
+
+  function asyncOperationPromise(a, b, operation) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (operation === "dodawanie") {
+          resolve(a + b);
+        } else if (operation === "mnożenie") {
+          resolve(a * b);
+        } else {
+          reject("Nieznana operacja");
+        }
+      }, 1000);
+    });
+  }
+  
+  async function main() {
+    const number1 = await getNumberInput("Podaj pierwszą liczbę: ");
+    const number2 = await getNumberInput("Podaj drugą liczbę: ");
+    const operation = await getOperationType();
+    const method = await getExecutionMethod();
+  
+    if (method === "callback") {
+      asyncOperationCallback(number1, number2, operation, (error, result) => {
+        if (error) {
+          console.error("Błąd:", error);
+        } else {
+          console.log("Wynik:", result);
+        }
+        rl.close();
+      });
+    } else if (method === "promise") {
+      asyncOperationPromise(number1, number2, operation)
+        .then((result) => {
+          console.log("Wynik:", result);
+        })
+        .catch((error) => {
+          console.error("Błąd:", error);
+        })
+        .finally(() => {
+          rl.close();
+        });
+    }
+  }
+  
+  main();
+  
