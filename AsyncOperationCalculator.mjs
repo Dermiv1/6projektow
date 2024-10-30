@@ -19,4 +19,17 @@ function getNumberInput(prompt) {
     });
   });
 }
-asd
+function getOperationType() {
+    return new Promise((resolve) => {
+      rl.question("Wybierz operację (dodawanie, mnożenie): ", (operation) => {
+        if (["dodawanie", "mnożenie"].includes(operation)) {
+          resolve(operation);
+        } else {
+          console.error("Błąd: Niepoprawna operacja.");
+          rl.close();
+          process.exit(1);
+        }
+      });
+    });
+  }
+  
