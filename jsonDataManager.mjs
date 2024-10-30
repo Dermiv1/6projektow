@@ -39,3 +39,34 @@ async function addNewObject(filePath) {
     rl.close();
   }
 }
+
+async function displayData(filePath) {
+    try {
+      const data = await fs.readFile(filePath, 'utf8');
+      const jsonArray = JSON.parse(data);
+      console.log('Dane z pliku JSON:', jsonArray);
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        console.log("Plik nie istnieje.");
+      } else {
+        console.log('Błąd w odczycie JSON:', err);
+      }
+    } finally {
+      rl.close();
+    }
+  }
+  
+  (async () => {
+    const option = await askQuestion('Wybierz opcję (1 - dodaj nowy obiekt, 2 - wyświetl dane): ');
+    const filePath = await askQuestion('Podaj ścieżkę do pliku JSON: ');
+  
+    if (option === '1') {
+      await addNewObject(filePath);
+    } else if (option === '2') {
+      await displayData(filePath);
+    } else {
+      console.log('Nieprawidłowa opcja.');
+      rl.close();
+    }
+  })();
+  
