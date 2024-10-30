@@ -32,4 +32,29 @@ function getOperationType() {
       });
     });
   }
+  function getExecutionMethod() {
+    return new Promise((resolve) => {
+      rl.question("Wybierz metodę (callback lub promise): ", (method) => {
+        if (["callback", "promise"].includes(method)) {
+          resolve(method);
+        } else {
+          console.error("Błąd: Niepoprawna metoda.");
+          rl.close();
+          process.exit(1);
+        }
+      });
+    });
+  }
+  
+  function asyncOperationCallback(a, b, operation, callback) {
+    setTimeout(() => {
+      if (operation === "dodawanie") {
+        callback(null, a + b);
+      } else if (operation === "mnożenie") {
+        callback(null, a * b);
+      } else {
+        callback("Nieznana operacja");
+      }
+    }, 1000);
+  }
   
