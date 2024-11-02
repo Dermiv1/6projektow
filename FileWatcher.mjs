@@ -48,3 +48,39 @@ class FileWatcher extends EventEmitter {
         }
       });
     });
+    
+
+    console.log(`Monitoring katalogu: ${this.directory}`);
+  }
+
+  
+  logChange(message) {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] ${message}\n`;
+    fs.appendFile(this.logFile, logMessage, (err) => {
+      if (err) console.error('Błąd przy zapisywaniu logu:', err);
+    });
+  }
+}
+
+
+const directoryToWatch = './ogladany_katalog';
+const logFile = './fileWatcher.log';
+
+
+const watcher = new FileWatcher(directoryToWatch, logFile);
+
+
+watcher.on('fileAdded', (filename) => {
+  console.log(`Dodano nowy plik: ${filename}`);
+});
+
+watcher.on('fileChanged', (filename) => {
+  console.log(`Zmieniono plik: ${filename}`);
+});
+
+watcher.on('fileRemoved', (filename) => {
+  console.log(`Usunięto plik: ${filename}`);
+});
+
+watcher.start();
